@@ -1,0 +1,22 @@
+#!/bin/zsh
+
+# 启动 Podman 虚拟机
+podman machine start
+
+# 检查虚拟机是否启动成功
+if [ $? -ne 0 ]; then
+  echo "Failed to start Podman machine."
+  exit 1
+fi
+
+# 定义一个函数来关闭 Podman 虚拟机
+cleanup() {
+  echo "Shutting down Podman machine..."
+  podman machine stop
+}
+
+# 使用 trap 确保脚本结束时会调用 cleanup 函数
+trap cleanup EXIT
+
+# 运行并挂载本地目录，启动交互式终端
+podman run --rm -it -v /Users/v_xiaolulang/Ubuntu:/root/Shell ubuntu:latest /bin/bash
